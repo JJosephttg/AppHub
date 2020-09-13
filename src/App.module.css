@@ -1,0 +1,50 @@
+body {
+  background-color: #121212;
+}
+
+.main-layout {
+  position: absolute;
+  display: flex;
+  width: 100%;
+  height: 100%;
+}
+
+.menu-btn {
+  margin-left: 1rem;
+  margin-top: .4rem;
+  font-size: 1.3rem;
+}
+
+.sidebar {
+  background-color: #222;
+  width: 18rem;
+  height: 100%;
+  overflow-x: hidden;
+  transition: 0.5s;
+}
+
+.side-nav-heading {
+  background-color: #f44336;
+  text-decoration: none;
+  height: 3rem;
+  line-height: 100%;
+  display: flex;
+  align-items: center;
+  padding: 0 0 0 2rem;
+}
+
+.side-nav-heading .side-nav-link {
+  color: #f1f1f1;
+}
+
+.side-nav-link {
+  text-decoration: none;
+  font-size: 1.2rem;
+  transition: 0.3s;
+  color: #818181;
+}
+
+.side-nav-link:hover {
+  color: #f1f1f1;
+  text-decoration: none;
+}
