@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
+import { BrowserRouter, Switch, Route } from 'react-router-dom';
 
 import ListingToolBar from './Containers/ListingToolBar/ListingToolBar';
+import CategoryListing from './Containers/CategoryListing/CategoryListing';
 
 import styles from './App.module.css';
 
@@ -9,7 +11,14 @@ const {app} = window.require('electron').remote;
 const App = _ => {
   return (
     <div className={styles["main-root"]}>
-      <ListingToolBar />
+      <BrowserRouter>
+        <ListingToolBar />
+        <Switch>
+          <Route path="/">
+            <CategoryListing />
+          </Route>
+        </Switch>
+      </BrowserRouter>
     </div>
   );
 };

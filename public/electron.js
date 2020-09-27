@@ -1,16 +1,11 @@
-const electron = require("electron");
-const app = electron.app;
-const BrowserWindow = electron.BrowserWindow;
+const { app, BrowserWindow} = require("electron");
 
 const path = require("path");
 const isDev = require("electron-is-dev");
 
-let mainWindow;
+const database = require('./DatabaseUtility');
 
-require("update-electron-app")({
-  repo: "kitze/react-electron-example",
-  updateInterval: "1 hour"
-});
+let mainWindow;
 
 function createWindow() {
   mainWindow = new BrowserWindow({ 
@@ -23,7 +18,12 @@ function createWindow() {
       : `file://${path.join(__dirname, "../build/index.html")}`
   );
 
-  mainWindow.on("closed", () => (mainWindow = null));
+  mainWindow.on("closed", () => {
+    database.close();
+    mainWindow = null
+  });
+  
+  database.open();
 }
 
 app.on("ready", createWindow);
