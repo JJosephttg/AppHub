@@ -21,21 +21,30 @@ h1, h2 {
 }
 
 .left-container {
-    width: auto;
     flex-grow: 1;
     overflow: hidden;
 }
 
+.middle-container {
+    padding-right: 1rem;
+}
+
 .right-container {
     justify-content: flex-end;
-    padding-right: 4rem;
     padding-left: 1rem;
+    padding-right: 1rem;
+}
+
+.right-container button {
+    margin-right: .5rem;
 }
 
 .container {
     display: flex;
     height: 100%;
     align-items: center;
+    width: auto;
+    flex-grow: 1;
 }
 
 .logo-container {
@@ -62,7 +71,8 @@ h1, h2 {
 
 .search-logo {
     background-color: red;
-    width: 2rem;
+    min-width: 2rem;
+    max-width: 2rem;
     height: 2rem;
     display: flex;
     justify-content: center;
@@ -74,5 +84,17 @@ h1, h2 {
 .search-input {
     height: 2rem;
     padding-left: .25rem;
-    width: 15rem;
+    width: 100%;
+}
+
+.iconSizeFont {
+    font-size: 1.6rem;
+    width: 2rem;
+    height: 2rem;
+    padding: 0;
+    margin-right: 1rem;
+    line-height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
