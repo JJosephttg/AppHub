@@ -5,6 +5,7 @@
   "version": "1.0.0",
   "private": true,
   "dependencies": {
+    "@material-ui/core": "^4.11.0",
     "bootstrap": "^4.5.2",
     "cross-env": "^6.0.2",
     "electron-is-dev": "1.1.0",
