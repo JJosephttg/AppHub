@@ -3,11 +3,11 @@ const { app, BrowserWindow} = require("electron");
 const path = require("path");
 const isDev = require("electron-is-dev");
 
-const database = require('./DatabaseUtility');
-
 let mainWindow;
 
 function createWindow() {
+  const database = require('./DatabaseUtility');
+  
   mainWindow = new BrowserWindow({ 
     width: 720, height: 680, minWidth: 600, webPreferences: { nodeIntegration: true }
   });

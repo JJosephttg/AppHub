@@ -1,5 +1,8 @@
 .page-root {
-    margin-top: 1rem;
+    margin: 1rem;
+    padding: 1rem;
+    background-color: #1F1F1F;
+    border-radius: 1rem;
 }
 
 .header-container {

@@ -1,6 +1,6 @@
 const sqlite = require('sqlite3');
 const electron = require('electron');
-const { dialog, BrowserWindow } = electron;
+const { dialog, BrowserWindow, ipcMain } = electron;
 
 let database;
 
@@ -24,8 +24,13 @@ const open = () => {
         "id"	INTEGER UNIQUE,
         "AppName"	TEXT NOT NULL,
         "Category"	INTEGER,
-        FOREIGN KEY("Category") REFERENCES "Categories"("id"),
+        FOREIGN KEY("Category") REFERENCES "Categories"("id") ON DELETE CASCADE,
         PRIMARY KEY("id" AUTOINCREMENT)
+    ); CREATE TABLE IF NOT EXISTS "Favorites" (
+        "id"	INTEGER NOT NULL UNIQUE,
+        "App_ID"	INTEGER NOT NULL UNIQUE,
+        PRIMARY KEY("id" AUTOINCREMENT),
+        FOREIGN KEY("App_ID") REFERENCES "Apps"("id") ON DELETE CASCADE
     );`;
 
     database.exec(tableSchema, error => {
@@ -37,6 +42,19 @@ const open = () => {
 }
 
 const close = () => database.close();
+
+ipcMain.handle("DBUtility-GetFavorites", (event, args) => {
+    const sql = `
+    SELECT Favorites.id, Apps.AppName FROM Apps, Favorites
+    `;
+    return new Promise(resolve => database.all(sql, (err, rows) => {
+        resolve({ 
+            error: err,
+            result: rows 
+        });
+    }));
+});
+
 
 module.exports = {
     open: open,
