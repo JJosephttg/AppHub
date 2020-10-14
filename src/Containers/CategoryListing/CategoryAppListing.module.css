@@ -1,14 +1,39 @@
 .category-header {
     color: white;
-    font-size: 1.5rem;
+    font-size: 1.4rem;
 }
 
 .app-container {
-    width: 7.5rem;
-    height: 7.5rem;
+    width: 7rem;
+    height: 7rem;
     background-color: #2A2A2A;
+    border-radius: 1rem;
+}
+
+.app-desc-container {
+    padding: 0 .5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 3rem;
 }
 
 .app-title {
     color: white;
+    font-size: .8rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.app-img {
+    color: white;
+    background-color: red;
+    margin-bottom: .25rem;
+    flex-shrink: unset;
+    border-top-left-radius: 1rem;
+    border-top-right-radius: 1rem;
+}
+
+svg.app-img {
+    padding: .6rem 0;
 }

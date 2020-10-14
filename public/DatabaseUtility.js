@@ -15,18 +15,21 @@ const open = () => {
         }
     });
 
-    let tableSchema = 
-    `CREATE TABLE IF NOT EXISTS 'Categories' (
+    let tableSchema = `
+    CREATE TABLE IF NOT EXISTS 'Categories' (
         "id"	INTEGER NOT NULL UNIQUE,
         "CategoryName"	TEXT NOT NULL UNIQUE,
         PRIMARY KEY("id" AUTOINCREMENT)
-    ); CREATE TABLE IF NOT EXISTS 'Apps' (
+    );    
+    CREATE TABLE IF NOT EXISTS 'Apps' (
         "id"	INTEGER UNIQUE,
         "AppName"	TEXT NOT NULL,
         "Category"	INTEGER,
+        "ImgSrc"	BLOB,
         FOREIGN KEY("Category") REFERENCES "Categories"("id") ON DELETE CASCADE,
         PRIMARY KEY("id" AUTOINCREMENT)
-    ); CREATE TABLE IF NOT EXISTS "Favorites" (
+    ); 
+    CREATE TABLE IF NOT EXISTS "Favorites" (
         "id"	INTEGER NOT NULL UNIQUE,
         "App_ID"	INTEGER NOT NULL UNIQUE,
         PRIMARY KEY("id" AUTOINCREMENT),
