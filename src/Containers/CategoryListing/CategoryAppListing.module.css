@@ -1,6 +1,13 @@
+.app-list-container {
+    display: flex;
+    flex-wrap: wrap;
+}
+
 .category-header {
     color: white;
     font-size: 1.4rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .app-container {
@@ -8,10 +15,11 @@
     height: 7rem;
     background-color: #2A2A2A;
     border-radius: 1rem;
+    margin: .5rem;
 }
 
 .app-desc-container {
-    padding: 0 .5rem;
+    padding: 0 .4rem;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -21,6 +29,8 @@
 .app-title {
     color: white;
     font-size: .8rem;
+    max-lines: 1;
+    white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
 }
