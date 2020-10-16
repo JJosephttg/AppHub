@@ -30,7 +30,7 @@ const CategoryAppListing = props => {
                         
                         <div className={[styles["app-desc-container"]].join(" ")}>
                             <p className={styles["app-info"]}>{app.AppName}</p>
-                            <p className={[styles["app-info"], styles["app-info-more"]].join(" ")}>example of launch args</p>
+                            <p className={[styles["app-info"], styles["app-info-more"]].join(" ")}> </p>
                         </div>
                     </div>
                 )) : null}
