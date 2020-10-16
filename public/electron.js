@@ -9,8 +9,10 @@ function createWindow() {
   const database = require('./DatabaseUtility');
   
   mainWindow = new BrowserWindow({ 
-    width: 720, height: 680, minWidth: 600, webPreferences: { nodeIntegration: true }
+    width: 720, height: 680, minWidth: 600, webPreferences: { nodeIntegration: true }, show: false
   });
+  
+  mainWindow.on("ready-to-show", mainWindow.show);
 
   mainWindow.loadURL(
     isDev
