@@ -25,6 +25,46 @@
     height: auto;
 }
 
+.overlay {
+    opacity: 0;
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    border-radius: 1rem;
+    background-color: rgba(20, 20, 20, .5);
+    padding: 1rem;
+}
+
+.overlay:hover {
+    opacity: 1;
+}
+
+.overlay {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.overlay-button {
+    display: flex;
+    border-radius: 100%;
+    background-color: green;
+    align-items: center;
+    justify-content: center;
+    width: 3rem;
+    height: 3rem;
+}
+
+.overlay-button svg {
+    color: white;
+    height: 2.5rem;
+    width: 2.5rem;
+    margin-right: -3px;
+    margin-bottom: -1px;
+}
+
 .app-desc-container {
     display: flex;
     flex-direction: column;
