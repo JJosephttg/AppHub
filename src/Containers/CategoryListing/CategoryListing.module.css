@@ -1,10 +1,19 @@
-.page-root {
-    margin: 1rem;
-    padding: 1rem;
-    background-color: #1F1F1F;
-    border-radius: 1rem;
-}
-
 .header-container {
     margin-right: 2rem;
+}
+
+.closeButton {
+    position: absolute;
+    top: 0;
+    right: 0;
+    color: white;
+    text-decoration: none;
+}
+
+.closeButton:hover {
+    color: gray;
+}
+
+.closeButton:focus {
+    box-shadow: none;
 }
