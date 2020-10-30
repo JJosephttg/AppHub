@@ -1,3 +1,11 @@
-.add-app-info-container {
+.app-settings-container {
     display: flex;
+}
+
+.app-info-container {
+    margin-left: 1rem;
+}
+
+h3 {
+    font-size: 1rem;
 }

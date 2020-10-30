@@ -5,7 +5,7 @@ import styles from './AppIcon.module.css';
 const AppIcon = props => {
     const size = props.size ?? "100%";
     return (
-        <div style={{height: size, width: size }}>
+        <div style={{height: size, width: size, minWidth: size, minHeight: size }}>
             {props.imgSrc ? 
                 <div className={styles["app-img"]} style={{backgroundImage: `url(${props.imgSrc})`}} /> : (
                 <svg className={`${styles["app-img"]} bi bi-window`} viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">

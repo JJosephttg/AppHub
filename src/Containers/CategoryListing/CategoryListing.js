@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { makeStyles, ThemeProvider, createMuiTheme} from '@material-ui/core/styles';
-import { Dialog, DialogContent, DialogContentText, DialogTitle, IconButton } from '@material-ui/core';
+import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, IconButton } from '@material-ui/core';
 
 import CategoryAppListing from './CategoryAppListing';
 import AppItemSettings from '../../Components/AppItem/AppItemSettings';
@@ -28,7 +28,8 @@ const useDialogStyle = makeStyles({
 const CategoryListing = props => {
     const [favoritesList, setFavorites] = useState([]);
     const [isDialogOpen, setIsDialogOpen] = useState(false);
-    const [saveHandler, setSaveHandler] = useState(null);
+
+    const appSettingsRef = useRef();
     
     useEffect(() => {
         //Load in favorites
@@ -44,6 +45,11 @@ const CategoryListing = props => {
 
     const dialogStyles = useDialogStyle();
 
+    const saveNewApp = () => {
+        setIsDialogOpen(false);
+        appSettingsRef.current.saveApp();
+    }
+
     return (
         <div>
             <CategoryAppListing categoryName="Favorites" appList={favoritesList} />
@@ -54,16 +60,17 @@ const CategoryListing = props => {
                     <DialogTitle>
                         <DialogContentText>Add New App</DialogContentText>
                         <button className={`${styles.closeButton} btn`} onClick={() => setIsDialogOpen(false)}>
-                            <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-x" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                                <path fill-rule="evenodd" d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
+                            <svg width="1em" height="1em" viewBox="0 0 16 16" className="bi bi-x" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                <path fillRule="evenodd" d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
                             </svg>
                         </button>
                     </DialogTitle>
-                    <DialogContent className={dialogStyles.dialogText}>
-                        <AppItemSettings />
-                        <br/>
-                        <button onClick={() => setIsDialogOpen(false)} style={{float: "right"}} className="btn btn-primary">Save</button>
+                    <DialogContent className={`${dialogStyles.dialogText} ${dialogStyles.root}`}>
+                        <AppItemSettings ref={appSettingsRef} />
                     </DialogContent>
+                    <DialogActions>
+                        <button onClick={saveNewApp} style={{float: "right", marginRight: "1rem", marginBottom: "1rem"}} className="btn btn-primary">Save</button>
+                    </DialogActions>
                 </Dialog>
             </ThemeProvider>
         </div>

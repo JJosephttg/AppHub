@@ -42,15 +42,19 @@ const open = () => {
 const close = () => database.close();
 
 ipcMain.handle("DBUtility-GetFavorites", (event, args) => {
-    const sql = `
-    SELECT * FROM Apps WHERE isFavorite = TRUE
-    `;
-    return new Promise(resolve => database.all(sql, (err, rows) => {
-        resolve({ 
-            error: err,
-            result: rows 
-        });
-    }));
+    // TODO: Only get chunk at a time
+    const sql = `SELECT * FROM Apps WHERE isFavorite = TRUE`;
+
+    return new Promise(resolve => database.all(sql, (err, rows) => resolve({ error: err, result: rows })));
+});
+
+ipcMain.handle("DBUtility-GetCategories", (event, args) => {
+    // TODO: Only get chunk at a time/when user types in something
+    // Not very scalable, but it is unlikely someone would have 100s or 1000s of categories, so 
+    // pull everything for now
+    const sql = `SELECT * FROM Categories`
+
+    return new Promise(resolve => database.all(sql, (err, rows) => resolve({error: err, result: rows})));
 });
 
 
