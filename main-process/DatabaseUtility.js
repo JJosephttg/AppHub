@@ -38,7 +38,7 @@ const open = () => {
         database.prepare(
             `CREATE TABLE IF NOT EXISTS ${categoryTable} (
                 "Id"           INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-                "CategoryName" TEXT NOT NULL
+                "CategoryName" TEXT NOT NULL UNIQUE
             )`
         ).run();
     } catch(error) {
@@ -101,10 +101,10 @@ ipcMain.handle("DBUtility-SaveApp", (event, app) => {
         ${app.CategoryName ? `Id FROM ${categoryTable} WHERE CategoryName = $appCategory` : "NULL)"} `;
     
     if(app.AppId) { //If appid exists, we are updating it/modifying it, otherwise, we must assume we are inserting
-        appInsertSql += `ON CONFLICT(Id) DO UPDATE SET Id=excluded.Id, AppName=excluded.AppName, AppPath=excluded.AppPath, 
+        appInsertSql += `ON CONFLICT(Id) DO UPDATE SET AppName=excluded.AppName, AppPath=excluded.AppPath, 
                 LaunchArgs=excluded.LaunchArgs, ImgSrc=excluded.ImgSrc, IsFavorite=excluded.IsFavorite, CategoryId=excluded.CategoryId`;
     }
-    console.log(sqlParams);
+    
     let insertApp = database.prepare(appInsertSql);
     
     try {
