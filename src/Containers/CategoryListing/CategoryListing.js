@@ -38,16 +38,25 @@ const CategoryListing = props => {
             searchHandler: () => {}
         });
 
-        ipcRenderer.invoke("DBUtility-GetFavorites").then(
-            data => setFavorites(prevData => [...prevData, ...data.result])
+        ipcRenderer.invoke("DBUtility-GetFavorites", 15).then(
+            data => {
+                if(data.error) return;
+                setFavorites(prevData => [...prevData, ...data.result])
+            }
         );
+
+        // Load max of 10-20 apps per category
     }, []);
 
     const dialogStyles = useDialogStyle();
 
     const saveNewApp = () => {
-        setIsDialogOpen(false);
-        appSettingsRef.current.saveApp();
+        appSettingsRef.current.saveApp().then(maybeApp => {
+            //If app was not added successfully, keep the dialog open since validation errors or failure to add app
+            if(maybeApp == null) return;
+            setIsDialogOpen(false);
+        });
+        
     }
 
     return (

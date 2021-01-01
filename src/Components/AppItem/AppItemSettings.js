@@ -15,16 +15,46 @@ const AppItemSettings = forwardRef((props, ref) => {
     const [appName, setAppName] = useState("");
     const [category, setCategory] = useState("");
     const [launchArgs, setLaunchArgs] = useState("");
+
+    const validateAppName = () => {
+        if(!appName || !appName.trim()) return false;
+        return true;
+    };
+
+    const validateAppPath = () => {
+        if(!appPath || !appPath.trim()) return false;
+        return true;
+    }
     
     useImperativeHandle(ref, () => ({
         saveApp() {
-            
+            // TODO: Add validation
+            var isInvalid = false;
+            isInvalid |= !validateAppName();
+            isInvalid |= !validateAppPath();
+
+            return new Promise((resolve) => {
+                if(isInvalid) {
+                    resolve(null);
+                    return;
+                }
+                var app = {
+                    AppName: appName.trim(),
+                    AppPath: appPath.trim(),
+                    CategoryName: category.trim(),
+                    ImgSrc: null,
+                    LaunchArgs: launchArgs.trim(),
+                    IsFavorite: 1
+                };
+                
+                ipcRenderer.invoke("DBUtility-SaveApp", app).then(isError => resolve(isError ? null : app));
+            });            
         }
     }));
     
     useEffect(() => {
         ipcRenderer.invoke("DBUtility-GetCategories").then(
-            data => setCategoryList(prevData => [...prevData, ...data.result])
+            (data) => data && !data.result ? null : setCategoryList(prevData => [...prevData, ...data.result])
         );
     }, []);
 
@@ -51,7 +81,7 @@ const AppItemSettings = forwardRef((props, ref) => {
                         variant="outlined"
                         value={appName}
                         onChange={event => setAppName(event.target.value)}/>
-                    <Autocomplete inputValue={category} onInputChange={(event, inputVal) => setCategory(inputVal)}
+                    <Autocomplete freeSolo inputValue={category} onInputChange={(event, inputVal) => setCategory(inputVal)}
                         options={categoryList.map(c => c.CategoryName)}
                         renderInput={(params) => 
                             <TextField {...params} margin="dense" fullWidth size="small" label="Category" color="secondary" variant="outlined" />
