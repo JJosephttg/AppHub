@@ -30,7 +30,7 @@ const open = () => {
                 "LaunchArgs"    TEXT,
                 "ImgSrc"	    BLOB,
                 "IsFavorite"    INTEGER NOT NULL DEFAULT 0 CHECK(IsFavorite IN (0,1)),
-                FOREIGN KEY(CategoryId) REFERENCES ${categoryTable}(CategoryName)
+                FOREIGN KEY(CategoryId) REFERENCES ${categoryTable}(Id) ON DELETE CASCADE
             )`
         ).run();
         
@@ -104,7 +104,7 @@ ipcMain.handle("DBUtility-SaveApp", (event, app) => {
         appInsertSql += `ON CONFLICT(Id) DO UPDATE SET AppName=excluded.AppName, AppPath=excluded.AppPath, 
                 LaunchArgs=excluded.LaunchArgs, ImgSrc=excluded.ImgSrc, IsFavorite=excluded.IsFavorite, CategoryId=excluded.CategoryId`;
     }
-    
+
     let insertApp = database.prepare(appInsertSql);
     
     try {
