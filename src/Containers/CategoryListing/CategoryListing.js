@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { makeStyles, ThemeProvider, createMuiTheme} from '@material-ui/core/styles';
-import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, IconButton } from '@material-ui/core';
+import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@material-ui/core';
 
 import CategoryAppListing from './CategoryAppListing';
 import AppItemSettings from '../../Components/AppItem/AppItemSettings';

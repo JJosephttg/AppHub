@@ -12,19 +12,41 @@ const AppItemSettings = forwardRef((props, ref) => {
     const [categoryList, setCategoryList] = useState([]);
 
     const [appPath, setAppPath] = useState("");
-    const [appName, setAppName] = useState("");
-    const [category, setCategory] = useState("");
-    const [launchArgs, setLaunchArgs] = useState("");
-
-    const validateAppName = () => {
-        if(!appName || !appName.trim()) return false;
-        return true;
-    };
+    const [appPathError, setAppPathError] = useState("");
 
     const validateAppPath = () => {
-        if(!appPath || !appPath.trim()) return false;
-        return true;
+        let errorMessage = "";
+        let appPathStr = appPath ? appPath.trim() : "";
+
+        if(!appPathStr) errorMessage = "App path must not be blank";
+
+        setAppPathError(errorMessage);
+        return !errorMessage;
     }
+
+    useEffect(_ => { validateAppPath(); }, [appPath]);
+
+    const [appName, setAppName] = useState("");
+    const [appNameError, setAppNameError] = useState("");
+
+    const validateAppName = () => {
+        let errorMessage = "";
+        let appNameStr = appName ? appName.trim() : "";
+
+        if(!appNameStr) errorMessage = "App name must not be blank";
+        else if(appNameStr.length > 50) errorMessage = "App name cannot be more than 50 characters in length";
+
+        setAppNameError(errorMessage);
+        return !errorMessage;
+    };
+
+    useEffect(_ => { validateAppName(); }, [appName]);
+
+    const [category, setCategory] = useState("");
+    const [categoryError, setCategoryError] = useState("");
+
+    const [launchArgs, setLaunchArgs] = useState("");
+    const [launchArgsError, setLaunchArgsError] = useState("");    
     
     useImperativeHandle(ref, () => ({
         saveApp() {
@@ -68,20 +90,27 @@ const AppItemSettings = forwardRef((props, ref) => {
         <div>
             <TextField style={{marginBottom: "2rem"}} fullWidth size="small" 
                     label="Executable Path" color="secondary" variant="outlined"
-                    value={appPath}
+                    value={appPath} required error={appPathError} helperText={appPathError}
                     onChange={event => setAppPath(event.target.value)}
-                    InputProps={{endAdornment:
-                        <InputAdornment position="end">
-                            <IconButton onClick={openFile} style={{height: "2rem", width: "2rem", boxShadow: "none"}}><FolderIcon/></IconButton>
-                        </InputAdornment>}}/>
+                    InputProps={{
+                        readOnly: true,
+                        endAdornment:
+                            <InputAdornment position="end">
+                                <IconButton onClick={openFile} style={{height: "2rem", width: "2rem", boxShadow: "none"}}>
+                                    <FolderIcon/>
+                                </IconButton>
+                            </InputAdornment>}}/>
             <div className={styles["app-settings-container"]}>
                 <AppIcon size="10rem" />
                 <div className={styles["app-info-container"]}>
                     <TextField margin="dense" size="small" fullWidth label="App Name" color="secondary" 
                         variant="outlined"
                         value={appName}
+                        required
+                        error={appNameError} helperText={appNameError}
                         onChange={event => setAppName(event.target.value)}/>
-                    <Autocomplete freeSolo inputValue={category} onInputChange={(event, inputVal) => setCategory(inputVal)}
+                    <Autocomplete freeSolo inputValue={category} 
+                        onInputChange={(event, inputVal) => setCategory(inputVal)}
                         options={categoryList.map(c => c.CategoryName)}
                         renderInput={(params) => 
                             <TextField {...params} margin="dense" fullWidth size="small" label="Category" color="secondary" variant="outlined" />
