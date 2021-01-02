@@ -27,16 +27,4 @@ const App = _ => {
   );
 };
 
-//Contains both layout for a modal dialog and page content
-//Contains either a category layout or app layout
-
-//Component layout:
-/*
-App
-- Modal/any overlay - Shows Edit Page/loading, etc...
-- CategoryPage
-- AppListingPage
-- header tools/search component
-*/
-
 export default App;

@@ -25,35 +25,6 @@
     align-items: stretch;
 }
 
-.app-overlay-container {
-    padding: 0;
-    position: relative;
-    width: 100%;
-    height: auto;
-}
-
-.overlay {
-    opacity: 0;
-    position: absolute;
-    top: 0;
-    left: 0;
-    height: 100%;
-    width: 100%;
-    border-radius: 1rem;
-    background-color: rgba(20, 20, 20, .5);
-    padding: 1rem;
-}
-
-.overlay:hover {
-    opacity: 1;
-}
-
-.overlay {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
 .overlay-button {
     display: flex;
     border-radius: 100%;

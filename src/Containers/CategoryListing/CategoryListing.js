@@ -30,18 +30,21 @@ const CategoryListing = props => {
     const [isDialogOpen, setIsDialogOpen] = useState(false);
 
     const appSettingsRef = useRef();
-    
+
+    const inputActionHandler = props.inputActionHandler;
     useEffect(() => {
-        //Load in favorites
-        if(props.inputActionHandler) props.inputActionHandler({
+        if(inputActionHandler) inputActionHandler({
             addHandler: () => setIsDialogOpen(true),
             searchHandler: () => {}
         });
-
+    }, [inputActionHandler]);
+    
+    useEffect(() => {
+        //Load in favorites
         ipcRenderer.invoke("DBUtility-GetFavorites", 15).then(
             data => {
                 if(data.error) return;
-                setFavorites(prevData => [...prevData, ...data.result])
+                setFavorites([...data.result]);
             }
         );
 
@@ -54,9 +57,15 @@ const CategoryListing = props => {
         appSettingsRef.current.saveApp().then(maybeApp => {
             //If app was not added successfully, keep the dialog open since validation errors or failure to add app
             if(maybeApp == null) return;
+
+            ipcRenderer.invoke("DBUtility-GetFavorites", 15).then(
+                data => {
+                    if(data.error) return;
+                    setFavorites([...data.result]);
+                }
+            );
             setIsDialogOpen(false);
         });
-        
     }
 
     return (

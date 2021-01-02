@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useImperativeHandle, forwardRef } from 'react';
+import React, { useEffect, useState, useImperativeHandle, forwardRef, useCallback } from 'react';
 import { IconButton, TextField, InputAdornment } from '@material-ui/core';
 import FolderIcon from '@material-ui/icons/Folder';
 import { Autocomplete } from '@material-ui/lab';
@@ -14,7 +14,7 @@ const AppItemSettings = forwardRef((props, ref) => {
     const [appPath, setAppPath] = useState("");
     const [appPathError, setAppPathError] = useState("");
 
-    const validateAppPath = () => {
+    const validateAppPath = useCallback(() => {
         let errorMessage = "";
         let appPathStr = appPath ? appPath.trim() : "";
 
@@ -22,14 +22,14 @@ const AppItemSettings = forwardRef((props, ref) => {
 
         setAppPathError(errorMessage);
         return !errorMessage;
-    }
+    }, [appPath]);
 
-    useEffect(_ => { validateAppPath(); }, [appPath]);
+    useEffect(_ => { validateAppPath(); }, [validateAppPath]);
 
     const [appName, setAppName] = useState("");
     const [appNameError, setAppNameError] = useState("");
 
-    const validateAppName = () => {
+    const validateAppName = useCallback(() => {
         let errorMessage = "";
         let appNameStr = appName ? appName.trim() : "";
 
@@ -38,15 +38,21 @@ const AppItemSettings = forwardRef((props, ref) => {
 
         setAppNameError(errorMessage);
         return !errorMessage;
-    };
+    }, [appName]);
 
-    useEffect(_ => { validateAppName(); }, [appName]);
+    useEffect(_ => { validateAppName(); }, [validateAppName]);
 
     const [category, setCategory] = useState("");
-    const [categoryError, setCategoryError] = useState("");
-
     const [launchArgs, setLaunchArgs] = useState("");
-    const [launchArgsError, setLaunchArgsError] = useState("");    
+    
+    const [imgData, setImgData] = useState(null);
+
+    const getImageData = _ => {
+        //Todo: Find a better way to read in base64 string
+        return new Promise((resolve, reject) => {
+            ipcRenderer.invoke("ProcessUtility-GetImageData").then(data => resolve(data), error => reject(error));
+        });
+    }
     
     useImperativeHandle(ref, () => ({
         saveApp() {
@@ -64,7 +70,7 @@ const AppItemSettings = forwardRef((props, ref) => {
                     AppName: appName.trim(),
                     AppPath: appPath.trim(),
                     CategoryName: category.trim(),
-                    ImgSrc: null,
+                    ImgSrc: imgData,
                     LaunchArgs: launchArgs.trim(),
                     IsFavorite: 1
                 };
@@ -76,13 +82,13 @@ const AppItemSettings = forwardRef((props, ref) => {
     
     useEffect(() => {
         ipcRenderer.invoke("DBUtility-GetCategories").then(
-            (data) => data && !data.result ? null : setCategoryList(prevData => [...prevData, ...data.result])
+            (data) => data && !data.result ? null : setCategoryList(prevData => [...data.result])
         );
     }, []);
 
-    const openFile = _ => {
-        ipcRenderer.invoke("FileSystem-OpenFileDialog").then(
-            fileResult => { if(!fileResult.canceled) setAppPath(fileResult.filePaths[0]); }
+    const openFile = callback => {
+        ipcRenderer.invoke("ProcessUtility-OpenFileDialog").then(
+            fileResult => { if(!fileResult.canceled) callback(fileResult.filePaths[0]); }
         );
     }
 
@@ -90,32 +96,38 @@ const AppItemSettings = forwardRef((props, ref) => {
         <div>
             <TextField style={{marginBottom: "2rem"}} fullWidth size="small" 
                     label="Executable Path" color="secondary" variant="outlined"
-                    value={appPath} required error={appPathError} helperText={appPathError}
+                    value={appPath} required error={appPathError ? true : false} helperText={appPathError}
                     onChange={event => setAppPath(event.target.value)}
                     InputProps={{
                         readOnly: true,
                         endAdornment:
                             <InputAdornment position="end">
-                                <IconButton onClick={openFile} style={{height: "2rem", width: "2rem", boxShadow: "none"}}>
+                                <IconButton onClick={_ => openFile(setAppPath)} style={{height: "2rem", width: "2rem", boxShadow: "none"}}>
                                     <FolderIcon/>
                                 </IconButton>
                             </InputAdornment>}}/>
             <div className={styles["app-settings-container"]}>
-                <AppIcon size="10rem" />
+                <AppIcon size="10rem" imgSrc={imgData} imageLoadFailed={_ => setImgData(null)}>
+                    <button className="btn btn-primary" onClick={
+                        _ => getImageData().then(data => { if(!data.canceled) setImgData(data.result); })
+                    }>Change Image</button>
+                </AppIcon>
                 <div className={styles["app-info-container"]}>
-                    <TextField margin="dense" size="small" fullWidth label="App Name" color="secondary" 
+                    <TextField size="small" fullWidth label="App Name" color="secondary" 
                         variant="outlined"
                         value={appName}
                         required
-                        error={appNameError} helperText={appNameError}
+                        error={appNameError ? true : false}
                         onChange={event => setAppName(event.target.value)}/>
+                    <p className={styles["error-text"]}>{appNameError}</p>
                     <Autocomplete freeSolo inputValue={category} 
                         onInputChange={(event, inputVal) => setCategory(inputVal)}
                         options={categoryList.map(c => c.CategoryName)}
                         renderInput={(params) => 
-                            <TextField {...params} margin="dense" fullWidth size="small" label="Category" color="secondary" variant="outlined" />
+                            <TextField {...params} fullWidth size="small" label="Category" color="secondary" variant="outlined" />
                     }/>
-                    <TextField margin="dense" size="small" fullWidth label="Launch Arguments" 
+                    <p className={styles["error-text"]}></p>
+                    <TextField size="small" fullWidth label="Launch Arguments" 
                         color="secondary" variant="outlined"
                         value={launchArgs}
                         onChange={event => setLaunchArgs(event.target.value)} />

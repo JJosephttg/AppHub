@@ -2,20 +2,18 @@ import React from 'react';
 
 import styles from './AppIcon.module.css';
 
+const defaultImage = "AppIcon.png";
+
 const AppIcon = props => {
-    const size = props.size ?? "100%";
+    const size = props.size ?? "auto";
     return (
-        <div style={{height: size, width: size, minWidth: size, minHeight: size }}>
-            {props.imgSrc ? 
-                <div className={styles["app-img"]} style={{backgroundImage: `url(${props.imgSrc})`}} /> : (
-                <svg className={`${styles["app-img"]} bi bi-window`} viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                    <path fillRule="evenodd" d="M14 2H2a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V3a1 1 0 0 0-1-1zM2 1a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2H2z"/>
-                    <path fillRule="evenodd" d="M15 6H1V5h14v1z"/>
-                    <path d="M3 3.5a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0zm1.5 0a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0zm1.5 0a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0z"/>
-                </svg>
-            )}
+        <div className={`${styles["app-overlay-container"]} card-body`} 
+             style={{height: size, width: size, maxWidth: size }}>
+            <div className={styles["overlay"]}>
+                {props.children}
+            </div>
+            <img className={styles["app-img"]} alt="" src={props.imgSrc || defaultImage}/>      
         </div>
-        
     );
 }
 
