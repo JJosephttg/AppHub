@@ -16,8 +16,24 @@ h3 {
     color: red;
     margin-left: .5rem;
     margin-top: .1rem;
-    margin-bottom: .3rem;
+    margin-bottom: .4rem;
     padding: 0;
     font-size: small;
     height: 1rem;
+}
+
+.closeButton {
+    position: absolute;
+    top: 0;
+    right: 0;
+    color: white;
+    text-decoration: none;
+}
+
+.closeButton:hover {
+    color: gray;
+}
+
+.closeButton:focus {
+    box-shadow: none;
 }

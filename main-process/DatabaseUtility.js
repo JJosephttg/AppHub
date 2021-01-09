@@ -88,7 +88,7 @@ ipcMain.handle("DBUtility-SaveApp", (event, app) => {
             appPath: app.AppPath,
             launchArgs: app.LaunchArgs || null,
             imgSrc: app.ImgSrc || null,
-            isFavorite: app.IsFavorite ?? 0,
+            isFavorite: app.IsFavorite ? 1 : 0,
     };
 
     // Insert category if it exists/isn't empty

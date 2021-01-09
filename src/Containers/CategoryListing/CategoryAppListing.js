@@ -1,5 +1,5 @@
 import React from 'react';
-import AppIcon from '../../Components/AppItem/AppIcon';
+import AppIcon from '../../Components/AppIcon/AppIcon';
 
 import styles from './CategoryAppListing.module.css';
 
