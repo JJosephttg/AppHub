@@ -1,0 +1,18 @@
+.app-list-container {
+    background-color: #2A2A2A;
+    border-radius: 1rem;
+    padding: 1rem;
+    margin: 1rem;
+}
+
+.app-listing-container {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.category-header {
+    color: white;
+    font-size: 1.4rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}

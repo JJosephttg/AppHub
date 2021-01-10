@@ -1,0 +1,12 @@
+.spinner-wrapper {
+    top: 0;
+    position: absolute;
+    width: 100%;
+    height: 100%; 
+    justify-content: center;
+    display: flex;
+}
+
+.spinner {
+    margin-top: 3rem;
+}

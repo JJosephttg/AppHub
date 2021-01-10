@@ -1,8 +1,17 @@
-
 .main-root {
   position: absolute;
   width: 100%;
-  height: auto;
+  display: flex;
+  flex-direction: column;
   min-height: 100%;
   background-color: #1F1F1F;
+}
+
+.page-container {
+  flex-grow: 1;
+  position: relative;
+}
+
+.toolbar {
+  flex-grow: 0;
 }

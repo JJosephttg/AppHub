@@ -5,7 +5,7 @@ import FavoriteBorder from '@material-ui/icons/FavoriteBorder';
 import FolderIcon from '@material-ui/icons/Folder';
 import { Autocomplete } from '@material-ui/lab';
 
-import AppIcon from '../../../Components/AppIcon/AppIcon';
+import AppIcon from '../../../Components/AppItem/AppIcon';
 
 import styles from './AppItemSettings.module.css';
 

@@ -2,7 +2,7 @@ import React, { useState, useCallback } from 'react';
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
 
 import ListingToolBar from '../../Components/ListingToolBar/ListingToolBar';
-import CategoryListing from '../CategoryListing/CategoryListing';
+import CategoryListingScreen from '../Screens/CategoryListingScreen';
 import MainAppDialog from '../Dialogs/MainAppDialog/MainAppDialog';
 
 import styles from './MainAppController.module.css';
@@ -32,18 +32,18 @@ const MainAppController = _ => {
 
   //Possibly title bar
   return (
-    <div className={styles["main-root"]}>
+    <div className={styles["main-root"]} ref={setMainDialogContainer}>
       <BrowserRouter>
         <MainAppContext.Provider value={appContext}>
-          <div ref={setMainDialogContainer}>
             <ListingToolBar inputActions={inputActions} />
-            <Switch>
-              <Route path="/">
-                <CategoryListing inputActionHandler={setInputActions} />
-              </Route>
-            </Switch>
+            <div className={styles["page-container"]}>
+              <Switch>
+                <Route path="/">
+                  <CategoryListingScreen inputActionHandler={setInputActions} />
+                </Route>
+              </Switch>
+            </div>
             <MainAppDialog contentProvider={currentContentProvider} close={appContext.closeMainDialog} isOpen={isMainDialogOpen}/>
-          </div>
         </MainAppContext.Provider>
       </BrowserRouter>
     </div>

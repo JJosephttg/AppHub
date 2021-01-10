@@ -1,26 +1,7 @@
-.app-list-container {
-    background-color: #2A2A2A;
-    border-radius: 1rem;
-    padding: 1rem;
-    margin: 1rem;
-}
-
-.app-listing-container {
-    display: flex;
-    flex-wrap: wrap;
-}
-
-.category-header {
-    color: white;
-    font-size: 1.4rem;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
 .app-container {
     background-color: transparent;
     border: 0px;
-    margin: 0rem .65rem;
+    margin: 0rem 1rem;
     width: 4.5rem;
     align-items: stretch;
 }

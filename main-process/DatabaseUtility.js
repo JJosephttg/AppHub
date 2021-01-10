@@ -7,6 +7,8 @@ let database;
 const appTable = "App";
 const categoryTable = "Category";
 
+const standardAppSelect = "Id, AppName, AppPath, LaunchArgs, ImgSrc, IsFavorite, CategoryName";
+
 const open = () => {
     if(database && database.open) database.close();
 
@@ -55,7 +57,7 @@ ipcMain.handle("DBUtility-GetCategories", (event, args) => {
     // TODO: Only get chunk at a time/when user types in something
     // Not very scalable, but it is unlikely someone would have 100s or 1000s of categories, so 
     // pull everything for now
-    const sql = `SELECT CategoryName FROM ${categoryTable} ORDER BY CategoryName`;
+    const sql = `SELECT CategoryName FROM ${categoryTable} ORDER BY CategoryName COLLATE NOCASE`;
     try { 
         return { result: database.prepare(sql).all() }; } 
     catch(error) {
@@ -64,24 +66,57 @@ ipcMain.handle("DBUtility-GetCategories", (event, args) => {
     }
 });
 
-ipcMain.handle("DBUtility-GetFavorites", (event, args) => {
+ipcMain.handle("DBUtility-GetFavorites", (event, limit) => {
     // TODO: Only get chunk at a time
-    const sql = `SELECT * FROM ${appTable} 
-                WHERE isFavorite = 1 
-                ORDER BY AppName
-                ${args ? `LIMIT ${args}` : null}`;
+    const sql = `
+        SELECT a.${standardAppSelect}
+        FROM ${appTable} a INNER JOIN ${categoryTable} c ON (a.CategoryId = c.Id)
+        WHERE isFavorite = 1 
+        ORDER BY AppName COLLATE NOCASE
+        ${limit ? `LIMIT ?` : null}
+    `;
 
     try { 
-        return { result: database.prepare(sql).all() }; } 
+        return { result: database.prepare(sql).all(limit) }; } 
     catch(error) {
         dialog.showErrorBox("Database Error", `Unable to retrieve app favorites: ${error}`);
         return { error: error };
     }
 });
 
+ipcMain.handle("DBUtility-GetCategoryPreviews", (event, limit) => {
+    const sql = `
+        SELECT ${standardAppSelect} FROM (
+            SELECT a.${standardAppSelect}, row_number() OVER (PARTITION BY CategoryId ORDER BY a.AppName COLLATE NOCASE) AS row
+            FROM ${appTable} a INNER JOIN ${categoryTable} c ON (a.CategoryId = c.Id)
+            ORDER BY c.CategoryName COLLATE NOCASE
+        ) WHERE row <= ?
+    `;
+
+    try { return { result: database.prepare(sql).all(limit)} } 
+    catch(error) {
+        dialog.showErrorBox("Database Error", `Unable to get category previews: ${error}`);
+        return { error: error};
+    }
+});
+
+ipcMain.handle("DBUtility-GetUncategorizedApps", (event, limit) => {
+    const sql = `
+        SELECT * FROM ${appTable}
+        WHERE CategoryId IS NULL 
+        ORDER BY AppName COLLATE NOCASE
+        ${limit ? `LIMIT ?` : null}
+    `;
+
+    try { return { result: database.prepare(sql).all(limit) } }
+    catch(error) {
+        dialog.showErrorBox("Database Error", `Unable to get uncategorized apps: ${error}`);
+        return { error: error };
+    }
+});
+
 ipcMain.handle("DBUtility-SaveApp", (event, app) => {
-    let sql = "", 
-        sqlParams = {
+    let sqlParams = {
             appId: app.AppId,
             appName: app.AppName,
             appCategory: app.CategoryName,
