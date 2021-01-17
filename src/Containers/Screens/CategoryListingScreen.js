@@ -23,9 +23,9 @@ const CategoryListingScreen = props => {
         //Load in favorites
         setIsLoadingData(true);
         Promise.all([
-            ipcRenderer.invoke("DBUtility-GetFavorites", 15), 
-            ipcRenderer.invoke("DBUtility-GetCategoryPreviews", 15),
-            ipcRenderer.invoke("DBUtility-GetUncategorizedApps", 15)
+            ipcRenderer.invoke("DBUtility-GetFavorites", 10), 
+            ipcRenderer.invoke("DBUtility-GetCategoryPreviews", 10),
+            ipcRenderer.invoke("DBUtility-GetApps", null, 10)
         ]).then(
             data => {
                 //Deal with favorites
@@ -61,14 +61,12 @@ const CategoryListingScreen = props => {
                     <CircularProgress size={30} className={listStyles["spinner"]} />
                 </div> : 
                 <Fragment>
-                    {favoritesList ? <AppListing categoryName="Favorites" appList={favoritesList} /> : null}
-                    {categoryData ? Object.keys(categoryData).map((category) => {
-                        console.log(category); console.log(categoryData); console.log(categoryData[category]);
-                        return <AppListing key={category} categoryName={category} appList={categoryData[category]} />
-                    }) : null }
-                    {uncategorizedList ? <AppListing categoryName="Other Apps" appList={uncategorizedList} /> : null}
+                    {favoritesList ? <AppListing categoryName="Favorites" listingLink="/favorites" appList={favoritesList} /> : null}
+                    {categoryData ? Object.keys(categoryData).map((category) => 
+                        <AppListing key={category} categoryName={category} appList={categoryData[category]} listingLink={`/apps/${encodeURIComponent(category)}`} />
+                    ) : null }
+                    {uncategorizedList ? <AppListing categoryName="Other Apps" appList={uncategorizedList} listingLink="/uncategorized" /> : null}
                 </Fragment>
-                
             } 
         </Fragment>
     );

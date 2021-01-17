@@ -1,11 +1,13 @@
 import React, { useState, useCallback } from 'react';
-import { BrowserRouter, Switch, Route } from 'react-router-dom';
+import { BrowserRouter, Switch, Route, useParams} from 'react-router-dom';
 
 import ListingToolBar from '../../Components/ListingToolBar/ListingToolBar';
 import CategoryListingScreen from '../Screens/CategoryListingScreen';
 import MainAppDialog from '../Dialogs/MainAppDialog/MainAppDialog';
 
 import styles from './MainAppController.module.css';
+import OtherAppsScreen from '../Screens/OtherAppsScreen';
+import AppListingScreen from '../Screens/AppListingScreen';
 
 export const MainAppContext = React.createContext();
 
@@ -38,8 +40,17 @@ const MainAppController = _ => {
             <ListingToolBar inputActions={inputActions} />
             <div className={styles["page-container"]}>
               <Switch>
-                <Route path="/">
+                <Route exact path="/">
                   <CategoryListingScreen inputActionHandler={setInputActions} />
+                </Route>
+                <Route exact path="/favorites">
+                  <OtherAppsScreen isFavorites/>
+                </Route>
+                <Route exact path="/uncategorized">
+                  <OtherAppsScreen />
+                </Route>
+                <Route exact path="/apps/:categoryName">
+                  <AppListingScreen/>
                 </Route>
               </Switch>
             </div>

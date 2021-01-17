@@ -73,11 +73,12 @@ ipcMain.handle("DBUtility-GetFavorites", (event, limit) => {
         FROM ${appTable} a INNER JOIN ${categoryTable} c ON (a.CategoryId = c.Id)
         WHERE isFavorite = 1 
         ORDER BY AppName COLLATE NOCASE
-        ${limit ? `LIMIT ?` : null}
+        ${limit ? `LIMIT ?` : ""}
     `;
 
     try { 
-        return { result: database.prepare(sql).all(limit) }; } 
+        const preparedSql = database.prepare(sql);
+        return { result: limit ? preparedSql.all(limit) : preparedSql.all() }; } 
     catch(error) {
         dialog.showErrorBox("Database Error", `Unable to retrieve app favorites: ${error}`);
         return { error: error };
@@ -100,17 +101,21 @@ ipcMain.handle("DBUtility-GetCategoryPreviews", (event, limit) => {
     }
 });
 
-ipcMain.handle("DBUtility-GetUncategorizedApps", (event, limit) => {
+ipcMain.handle("DBUtility-GetApps", (event, category, limit) => {
     const sql = `
-        SELECT * FROM ${appTable}
-        WHERE CategoryId IS NULL 
+        SELECT a.${standardAppSelect} FROM ${appTable} a LEFT JOIN ${categoryTable} c ON (a.CategoryId = c.Id)
+        WHERE ${category ? "CategoryName = @category" : "CategoryId IS NULL"}
         ORDER BY AppName COLLATE NOCASE
-        ${limit ? `LIMIT ?` : null}
+        ${limit ? `LIMIT @limit` : ""}
     `;
 
-    try { return { result: database.prepare(sql).all(limit) } }
-    catch(error) {
-        dialog.showErrorBox("Database Error", `Unable to get uncategorized apps: ${error}`);
+    try { 
+        let data = {};
+        if(limit) data = {limit: limit};
+        if(category) data = {...data, category: category}
+        return { result: database.prepare(sql).all(data) };
+    } catch(error) {
+        dialog.showErrorBox("Database Error", `Unable to get apps: ${error}`);
         return { error: error };
     }
 });

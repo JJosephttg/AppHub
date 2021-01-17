@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { Fragment } from 'react';
+import SettingsIcon from '@material-ui/icons/Settings';
 
 import AppIcon from './AppIcon';
 
@@ -15,7 +16,10 @@ const AppItem = props => {
             </div>
             </AppIcon>
             <div className={styles["app-desc-container"]}>
-                <p className={styles["app-info"]}>{props.app.AppName}</p>
+                <div className={styles["app-title-settings-container"]}>
+                    <p className={styles["app-info"]}>{props.app.AppName}</p>
+                    <SettingsIcon fontSize="small" style={{color: "white"}}/>
+                </div>
                 <p className={`${styles["app-info"]} ${styles["app-info-more"]}`}>{props.app.LaunchArgs}</p>
             </div>
         </div>

@@ -2,7 +2,7 @@
     background-color: transparent;
     border: 0px;
     margin: 0rem 1rem;
-    width: 4.5rem;
+    width: 5.5rem;
     align-items: stretch;
 }
 
@@ -27,7 +27,6 @@
 .app-desc-container {
     display: flex;
     flex-direction: column;
-    align-items: center;
     margin-top: .5rem;
     margin-bottom: .5rem;
     height: 2.5rem;
@@ -46,4 +45,9 @@
 
 .app-info-more {
     color: gray;
+}
+
+.app-title-settings-container {
+    display: flex;
+    
 }

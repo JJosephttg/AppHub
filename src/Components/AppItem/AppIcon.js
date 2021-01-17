@@ -2,7 +2,7 @@ import React from 'react';
 
 import styles from './AppIcon.module.css';
 
-const defaultImage = "AppIcon.png";
+const defaultImage = "/AppIcon.png";
 
 const AppIcon = props => {
     const size = props.size ?? "auto";

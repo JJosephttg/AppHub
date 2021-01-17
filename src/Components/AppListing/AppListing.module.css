@@ -3,6 +3,7 @@
     border-radius: 1rem;
     padding: 1rem;
     margin: 1rem;
+    margin-bottom: 0;
 }
 
 .app-listing-container {
@@ -15,4 +16,12 @@
     font-size: 1.4rem;
     overflow: hidden;
     text-overflow: ellipsis;
+}
+
+.view-all-link {
+    color: rgb(0, 132, 255);
+}
+
+.view-all-link:hover {
+    text-decoration: none;
 }

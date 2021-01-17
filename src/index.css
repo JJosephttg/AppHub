@@ -2,6 +2,11 @@ body {
   margin: 0;
   padding: 0;
   font-family: sans-serif;
+  height: 100%;
+}
+
+html {
+  height: 100%;
 }
 
 :not(input):not(textarea),
@@ -13,4 +18,8 @@ body {
 }
 input, button, textarea, :focus {
     outline: none;
+}
+
+#root {
+  height: 100%;
 }
