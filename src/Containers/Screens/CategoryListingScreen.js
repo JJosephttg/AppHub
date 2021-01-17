@@ -43,14 +43,14 @@ const CategoryListingScreen = props => {
         );
     }
 
-    const inputActionHandler = props.inputActionHandler;
     useEffect(() => {
-        if(inputActionHandler) inputActionHandler({
+        mainAppContext.setToolbarActions({
             addHandler: () => mainAppContext.openMainDialog(
                 props => <AppItemSettings {...{...props, onSave: updateListing, close: mainAppContext.closeMainDialog}} />),
             searchHandler: () => {}
         });
-    }, [inputActionHandler, mainAppContext]);
+        mainAppContext.setPageTitle("Categories");
+    }, [mainAppContext]);
     
     useEffect(updateListing, []);
 
@@ -61,11 +61,11 @@ const CategoryListingScreen = props => {
                     <CircularProgress size={30} className={listStyles["spinner"]} />
                 </div> : 
                 <Fragment>
-                    {favoritesList ? <AppListing categoryName="Favorites" listingLink="/favorites" appList={favoritesList} /> : null}
+                    {favoritesList ? <AppListing displayName="Favorites" listingLink="/favorites" appList={favoritesList} /> : null}
                     {categoryData ? Object.keys(categoryData).map((category) => 
-                        <AppListing key={category} categoryName={category} appList={categoryData[category]} listingLink={`/apps/${encodeURIComponent(category)}`} />
+                        <AppListing key={category} displayName={category} appList={categoryData[category]} listingLink={`/apps/${encodeURIComponent(category)}`} />
                     ) : null }
-                    {uncategorizedList ? <AppListing categoryName="Other Apps" appList={uncategorizedList} listingLink="/uncategorized" /> : null}
+                    {uncategorizedList ? <AppListing displayName="Other Apps" appList={uncategorizedList} listingLink="/uncategorized" /> : null}
                 </Fragment>
             } 
         </Fragment>

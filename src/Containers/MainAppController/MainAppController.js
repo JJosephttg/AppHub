@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from 'react';
-import { BrowserRouter, Switch, Route, useParams} from 'react-router-dom';
+import { BrowserRouter, Switch, Route} from 'react-router-dom';
 
 import ListingToolBar from '../../Components/ListingToolBar/ListingToolBar';
 import CategoryListingScreen from '../Screens/CategoryListingScreen';
@@ -17,15 +17,19 @@ const MainAppController = _ => {
     addHandler: null
   });
 
+  const [toolbarTitle, setToolbarTitle] = useState();
+
   const [isMainDialogOpen, setIsMainDialogOpen] = useState(false);
   const [currentContentProvider, setCurrentContentProvider] = useState();
 
   const [appContext, setAppContext] = useState({
-    closeMainDialog: () => setIsMainDialogOpen(false),
-    openMainDialog: (contentProvider) => {
-      setCurrentContentProvider(() => contentProvider);
-      setIsMainDialogOpen(() => true);
-    }
+    closeMainDialog: _ => setIsMainDialogOpen(false),
+    openMainDialog: contentProvider => {
+      setCurrentContentProvider(_ => contentProvider);
+      setIsMainDialogOpen(_ => true);
+    },
+    setPageTitle: setToolbarTitle,
+    setToolbarActions: actionsHandler => setInputActions(actionsHandler)
   });
 
   const setMainDialogContainer = useCallback(
@@ -37,11 +41,11 @@ const MainAppController = _ => {
     <div className={styles["main-root"]} ref={setMainDialogContainer}>
       <BrowserRouter>
         <MainAppContext.Provider value={appContext}>
-            <ListingToolBar inputActions={inputActions} />
+            <ListingToolBar title={toolbarTitle} inputActions={inputActions} />
             <div className={styles["page-container"]}>
               <Switch>
                 <Route exact path="/">
-                  <CategoryListingScreen inputActionHandler={setInputActions} />
+                  <CategoryListingScreen />
                 </Route>
                 <Route exact path="/favorites">
                   <OtherAppsScreen isFavorites/>
@@ -50,7 +54,7 @@ const MainAppController = _ => {
                   <OtherAppsScreen />
                 </Route>
                 <Route exact path="/apps/:categoryName">
-                  <AppListingScreen/>
+                  <AppListingScreen />
                 </Route>
               </Switch>
             </div>

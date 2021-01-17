@@ -73,12 +73,12 @@ ipcMain.handle("DBUtility-GetFavorites", (event, limit) => {
         FROM ${appTable} a INNER JOIN ${categoryTable} c ON (a.CategoryId = c.Id)
         WHERE isFavorite = 1 
         ORDER BY AppName COLLATE NOCASE
-        ${limit ? `LIMIT ?` : ""}
+        ${limit ? `LIMIT @limit` : ""}
     `;
 
     try { 
-        const preparedSql = database.prepare(sql);
-        return { result: limit ? preparedSql.all(limit) : preparedSql.all() }; } 
+        const data = limit ? {limit: limit} : {};
+        return { result: database.prepare(sql).all(data) }; } 
     catch(error) {
         dialog.showErrorBox("Database Error", `Unable to retrieve app favorites: ${error}`);
         return { error: error };
@@ -110,8 +110,7 @@ ipcMain.handle("DBUtility-GetApps", (event, category, limit) => {
     `;
 
     try { 
-        let data = {};
-        if(limit) data = {limit: limit};
+        let data = limit ? {limit: limit} : {};
         if(category) data = {...data, category: category}
         return { result: database.prepare(sql).all(data) };
     } catch(error) {

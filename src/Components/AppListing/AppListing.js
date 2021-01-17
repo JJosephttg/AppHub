@@ -10,7 +10,7 @@ const AppListing = props => {
 
     return (
         <div style={containerStyle} className={styles["app-list-container"]}>
-            {props.categoryName ? <h1 className={styles["category-header"]}>{props.categoryName}</h1> : null}
+            {props.displayName ? <h1 className={styles["category-header"]}>{props.displayName}</h1> : null}
             <div className={styles["app-listing-container"]}>
                 {props.appList ? props.appList.map(app => <AppItem app={app} key={app.Id}/>) : null}
             </div>

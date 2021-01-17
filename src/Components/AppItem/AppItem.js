@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import SettingsIcon from '@material-ui/icons/Settings';
 
 import AppIcon from './AppIcon';

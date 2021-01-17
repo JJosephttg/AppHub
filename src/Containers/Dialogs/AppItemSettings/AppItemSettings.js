@@ -44,11 +44,10 @@ const AppItemSettings = (props) => {
     }, [appName]);
 
     useEffect(_ => { validateAppName(); }, [validateAppName]);
-
-    const [category, setCategory] = useState("");
+    const initialApp = props.initialApp ?? {};
+    const [category, setCategory] = useState(initialApp.CategoryName);
     const [launchArgs, setLaunchArgs] = useState("");
-    const [isFavorite, setIsFavorite] = useState(false);
-    
+    const [isFavorite, setIsFavorite] = useState(initialApp.IsFavorite);
     const [imgData, setImgData] = useState(null);
 
     const getImageData = _ => {
@@ -142,7 +141,7 @@ const AppItemSettings = (props) => {
                                 error={appNameError ? true : false}
                                 onChange={event => setAppName(event.target.value)}/>
                             <p className={styles["error-text"]}>{appNameError}</p>
-                            <Autocomplete freeSolo inputValue={category} 
+                            <Autocomplete freeSolo value={category} 
                                 onInputChange={(event, inputVal) => setCategory(inputVal)}
                                 options={categoryList.map(c => c.CategoryName)}
                                 renderInput={(params) => 

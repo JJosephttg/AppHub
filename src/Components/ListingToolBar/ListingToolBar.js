@@ -33,8 +33,8 @@ const ListingToolBar = props => {
                         </svg>
                     </Link>
                 </div>
-                <ToolTip title="Categories" placement="bottom" disableHoverListener={!shouldToolTip}>
-                    <h1 ref={textElementRef} className={styles["page-title"]}>Categories</h1>
+                <ToolTip title={props.title ?? ""} placement="bottom" disableHoverListener={!shouldToolTip}>
+                    <h1 ref={textElementRef} className={styles["page-title"]}>{props.title}</h1>
                 </ToolTip>
             </div>
              

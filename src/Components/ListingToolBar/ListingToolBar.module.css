@@ -1,9 +1,11 @@
 .page-title {
     font-size: 1.5rem;
     margin-left: 1rem;
+    margin-right: 1rem;
     margin-bottom: 0;
     overflow: hidden;
     text-overflow: ellipsis;
+    white-space: nowrap;
     color: white;
 }
 
@@ -25,6 +27,7 @@
 
 .middle-container {
     padding-right: 1rem;
+    min-width: 50%;
 }
 
 .right-container {
