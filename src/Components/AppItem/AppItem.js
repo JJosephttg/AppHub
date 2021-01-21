@@ -1,11 +1,14 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import SettingsIcon from '@material-ui/icons/Settings';
 
 import AppIcon from './AppIcon';
+import TruncatedToolTip from '../Utility/TruncatedToolTip';
 
 import styles from './AppItem.module.css';
 
 const AppItem = props => {
+    const appNameDescRef = useRef(), launchArgsDescRef = useRef();
+
     return (
         <div className={`card ${styles["app-container"]}`}>
             <AppIcon size="5.5rem" imgSrc={props.app.ImgSrc} >
@@ -17,10 +20,14 @@ const AppItem = props => {
             </AppIcon>
             <div className={styles["app-desc-container"]}>
                 <div className={styles["app-title-settings-container"]}>
-                    <p className={styles["app-info"]}>{props.app.AppName}</p>
+                    <TruncatedToolTip ref={appNameDescRef} label={props.app.AppName} placement="bottom">
+                        <p ref={appNameDescRef} className={styles["app-info"]}>{props.app.AppName}</p>
+                    </TruncatedToolTip>  
                     <SettingsIcon fontSize="small" style={{color: "white"}}/>
                 </div>
-                <p className={`${styles["app-info"]} ${styles["app-info-more"]}`}>{props.app.LaunchArgs}</p>
+                <TruncatedToolTip ref={appNameDescRef} label={props.app.LaunchArgs} placement="bottom">
+                    <p ref={launchArgsDescRef} className={`${styles["app-info"]} ${styles["app-info-more"]}`}>{props.app.LaunchArgs}</p>
+                </TruncatedToolTip>
             </div>
         </div>
     );

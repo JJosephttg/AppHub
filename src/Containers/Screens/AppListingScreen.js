@@ -7,7 +7,7 @@ import { MainAppContext } from '../MainAppController/MainAppController';
 
 const { ipcRenderer } = window.require('electron');
 
-const AppListingScreen = props => {
+const AppListingScreen = _ => {
     const mainAppContext = useContext(MainAppContext);
     const categoryName = decodeURIComponent(useParams().categoryName);
     const [appList, setAppList] = useState([]);

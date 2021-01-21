@@ -1,24 +1,12 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useRef } from 'react';
 import { Link } from 'react-router-dom';
-import ToolTip from '@material-ui/core/Tooltip'
+
+import TruncatedToolTip from '../Utility/TruncatedToolTip';
 
 import styles from './ListingToolBar.module.css';
 
 const ListingToolBar = props => {
-    const [ shouldToolTip, setShouldToolTip] = useState(false);
-    const textElementRef = useRef();
-
-    const compareSize = () => {
-        const isTruncated = textElementRef.current.scrollWidth > textElementRef.current.clientWidth;
-        setShouldToolTip(isTruncated);
-    };
-
-    useEffect(() => {
-        compareSize();
-        window.addEventListener('resize', compareSize);
-
-        return () => window.removeEventListener('resize', compareSize);
-    }, []);
+    const titleRef = useRef();
 
     const isSearchHidden = props.inputActions?.searchHandler == null;
     const isAddHidden = props.inputActions?.addHandler == null;
@@ -33,9 +21,9 @@ const ListingToolBar = props => {
                         </svg>
                     </Link>
                 </div>
-                <ToolTip title={props.title ?? ""} placement="bottom" disableHoverListener={!shouldToolTip}>
-                    <h1 ref={textElementRef} className={styles["page-title"]}>{props.title}</h1>
-                </ToolTip>
+                <TruncatedToolTip ref={titleRef} label={props.title} placement="bottom">
+                    <h1 ref={titleRef} className={styles["page-title"]}>{props.title}</h1>
+                </TruncatedToolTip>
             </div>
              
             { isSearchHidden ? null : (
