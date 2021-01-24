@@ -48,10 +48,11 @@ ipcMain.handle("ProcessUtility-GetImageData", (event, args) => {
 ipcMain.handle("ProcessUtility-RunApp", (event, app) => {
   return new Promise((resolve, reject) => {
     try {
-      childProcess.spawn(app.AppPath, [app.LaunchArgs], {detached: true, shell: true});
+      if(!fs.existsSync(app.AppPath)) throw "File does not exist";
+      childProcess.spawn(`"${app.AppPath}"`, [app.LaunchArgs], {detached: true, shell: true});
     } catch(error) {
-      dialog.showErrorBox("Launch App", `Failed to launch app: ${err}`);
-      resolve(err);
+      dialog.showErrorBox("Launch App", `Failed to spawn application: ${error}`);
+      resolve(error);
     }
   });
 });

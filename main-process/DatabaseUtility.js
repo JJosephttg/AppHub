@@ -23,6 +23,7 @@ const open = () => {
     }
 
     try {
+        database.pragma("journal_mode = WAL");
         database.prepare(
             `CREATE TABLE IF NOT EXISTS ${appTable} (
                 "Id"            INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
@@ -32,10 +33,9 @@ const open = () => {
                 "LaunchArgs"    TEXT,
                 "ImgSrc"	    BLOB,
                 "IsFavorite"    INTEGER NOT NULL DEFAULT 0 CHECK(IsFavorite IN (0,1)),
-                FOREIGN KEY(CategoryId) REFERENCES ${categoryTable}(Id) ON DELETE CASCADE
+                FOREIGN KEY(CategoryId) REFERENCES ${categoryTable}(Id) ON DELETE CASCADE ON UPDATE CASCADE
             )`
         ).run();
-        
         
         database.prepare(
             `CREATE TABLE IF NOT EXISTS ${categoryTable} (
@@ -43,6 +43,18 @@ const open = () => {
                 "CategoryName" TEXT NOT NULL UNIQUE
             )`
         ).run();
+
+        // Trigger to automatically remove categories that are dereferenced
+        // Unfortunately, there is no way to specify multiple event types without rewriting the logic :(
+        const categoryCleanupTriggerLogic = (triggerName, eventType) => 
+            `CREATE TRIGGER IF NOT EXISTS '${triggerName}' AFTER ${eventType}
+            ${eventType == "UPDATE" ? "OF CategoryId" : ""} ON ${appTable}
+            BEGIN
+            DELETE FROM ${categoryTable} WHERE NOT EXISTS (SELECT 1 FROM ${appTable} a WHERE a.CategoryId = ${categoryTable}.Id);
+            END`;
+        
+        database.prepare(categoryCleanupTriggerLogic("CategoryCleanup-UpdateTrigger", "UPDATE")).run();
+        database.prepare(categoryCleanupTriggerLogic("CategoryCleanup-DeleteTrigger", "DELETE")).run();
     } catch(error) {
         dialog.showMessageBoxSync({
             title: "Database Error", 
