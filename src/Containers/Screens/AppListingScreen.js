@@ -11,21 +11,22 @@ const AppListingScreen = _ => {
     const mainAppContext = useContext(MainAppContext);
     const categoryName = decodeURIComponent(useParams().categoryName);
     const [appList, setAppList] = useState([]);
+    const [currentSearchTerm, setCurrentSearchTerm] = useState();
 
     const updateListing = useCallback(_ => {
-        ipcRenderer.invoke("DBUtility-GetApps", categoryName).then(data => {
+        ipcRenderer.invoke("DBUtility-GetApps", categoryName, {search: currentSearchTerm}).then(data => {
             if(!data.error) setAppList([...data.result]);
         });
-    }, [categoryName]);
+    }, [categoryName, currentSearchTerm]);
 
-    useEffect(updateListing, [categoryName]);
+    useEffect(updateListing, [categoryName, currentSearchTerm]);
 
     useEffect(_ => {
         mainAppContext.setToolbarActions({
             addHandler: _ => mainAppContext.openMainDialog(props => 
                 <AppItemSettings {...{...props, initialApp: {CategoryName: categoryName}, onSave: updateListing, close: mainAppContext.closeMainDialog}} />
             ),
-            searchHandler: _ => {}
+            searchHandler: setCurrentSearchTerm
         });
         mainAppContext.setPageTitle(categoryName);
     }, [mainAppContext, categoryName, updateListing]);

@@ -34,7 +34,9 @@ const ListingToolBar = props => {
                             <path fillRule="evenodd" d="M6.5 12a5.5 5.5 0 1 0 0-11 5.5 5.5 0 0 0 0 11zM13 6.5a6.5 6.5 0 1 1-13 0 6.5 6.5 0 0 1 13 0z"/>
                         </svg>
                     </div>
-                    <input className={styles["search-input"]} type="text" placeholder="Search..."/>
+                    <input onKeyPress={event => event.key === "Enter" ? 
+                        props.inputActions.searchHandler(event.target.value.trim() ?? null) : null
+                    } className={styles["search-input"]} type="text" placeholder="Search..."/>
                 </div>
             )}
             

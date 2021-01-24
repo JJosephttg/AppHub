@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext, Fragment } from 'react';
+import React, { useEffect, useState, useContext, Fragment, useCallback } from 'react';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
 import { MainAppContext } from '../MainAppController/MainAppController';
@@ -15,17 +15,19 @@ const CategoryListingScreen = props => {
     const [favoritesList, setFavorites] = useState([]);
     const [categoryData, setCategoryData] = useState({});
     const [uncategorizedList, setUncategorizedList] = useState([]);
+    const [currentSearchTerm, setCurrentSearchTerm] = useState();
     
-    const updateListing = _ => {
+    const updateListing = useCallback(_ => {
         //TODO: Update each category app listing
         // Load max of 10-20 apps per category
 
         //Load in favorites
         setIsLoadingData(true);
+        const params = {limit: 10, search: currentSearchTerm};
         Promise.all([
-            ipcRenderer.invoke("DBUtility-GetFavorites", 10), 
-            ipcRenderer.invoke("DBUtility-GetCategoryPreviews", 10),
-            ipcRenderer.invoke("DBUtility-GetApps", null, 10)
+            ipcRenderer.invoke("DBUtility-GetFavorites", params), 
+            ipcRenderer.invoke("DBUtility-GetCategoryPreviews", params),
+            ipcRenderer.invoke("DBUtility-GetApps", null, params)
         ]).then(
             data => {
                 //Deal with favorites
@@ -41,18 +43,18 @@ const CategoryListingScreen = props => {
                 setIsLoadingData(false);
             }
         );
-    }
+    }, [currentSearchTerm]);
 
     useEffect(() => {
         mainAppContext.setToolbarActions({
             addHandler: () => mainAppContext.openMainDialog(
                 props => <AppItemSettings {...{...props, onSave: updateListing, close: mainAppContext.closeMainDialog}} />),
-            searchHandler: () => {}
+            searchHandler: setCurrentSearchTerm
         });
         mainAppContext.setPageTitle("Categories");
-    }, [mainAppContext]);
+    }, [mainAppContext, updateListing]);
     
-    useEffect(updateListing, []);
+    useEffect(updateListing, [currentSearchTerm]);
 
     return (
         <Fragment>
@@ -71,6 +73,5 @@ const CategoryListingScreen = props => {
         </Fragment>
     );
 }
-
 
 export default CategoryListingScreen;

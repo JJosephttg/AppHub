@@ -66,18 +66,18 @@ ipcMain.handle("DBUtility-GetCategories", (event, args) => {
     }
 });
 
-ipcMain.handle("DBUtility-GetFavorites", (event, limit) => {
+ipcMain.handle("DBUtility-GetFavorites", (event, options) => {
     // TODO: Only get chunk at a time
     const sql = `
         SELECT a.${standardAppSelect}
         FROM ${appTable} a INNER JOIN ${categoryTable} c ON (a.CategoryId = c.Id)
-        WHERE isFavorite = 1 
+        WHERE isFavorite = 1 ${options.search ? "AND AppName LIKE '%'||@search||'%'" : ""}
         ORDER BY AppName COLLATE NOCASE
-        ${limit ? `LIMIT @limit` : ""}
+        ${options.limit ? `LIMIT @limit` : ""}
     `;
 
     try { 
-        const data = limit ? {limit: limit} : {};
+        const data = {...options};
         return { result: database.prepare(sql).all(data) }; } 
     catch(error) {
         dialog.showErrorBox("Database Error", `Unable to retrieve app favorites: ${error}`);
@@ -85,32 +85,34 @@ ipcMain.handle("DBUtility-GetFavorites", (event, limit) => {
     }
 });
 
-ipcMain.handle("DBUtility-GetCategoryPreviews", (event, limit) => {
+ipcMain.handle("DBUtility-GetCategoryPreviews", (event, options) => {
     const sql = `
         SELECT ${standardAppSelect} FROM (
             SELECT a.${standardAppSelect}, row_number() OVER (PARTITION BY CategoryId ORDER BY a.AppName COLLATE NOCASE) AS row
             FROM ${appTable} a INNER JOIN ${categoryTable} c ON (a.CategoryId = c.Id)
-            ORDER BY c.CategoryName COLLATE NOCASE
-        ) WHERE row <= ?
+            ${options.search ? "WHERE AppName LIKE '%'||@search||'%'" : ""}
+            ORDER BY c.CategoryName COLLATE NOCASE  
+        ) WHERE row <= @limit
     `;
-
-    try { return { result: database.prepare(sql).all(limit)} } 
+    
+    const data = {...options}
+    try { return { result: database.prepare(sql).all(data)} } 
     catch(error) {
         dialog.showErrorBox("Database Error", `Unable to get category previews: ${error}`);
         return { error: error};
     }
 });
 
-ipcMain.handle("DBUtility-GetApps", (event, category, limit) => {
+ipcMain.handle("DBUtility-GetApps", (event, category, options) => {
     const sql = `
         SELECT a.${standardAppSelect} FROM ${appTable} a LEFT JOIN ${categoryTable} c ON (a.CategoryId = c.Id)
-        WHERE ${category ? "CategoryName = @category" : "CategoryId IS NULL"}
+        WHERE ${category ? "CategoryName = @category" : "CategoryId IS NULL"} ${options.search ? "AND AppName LIKE '%'||@search||'%'" : ""}
         ORDER BY AppName COLLATE NOCASE
-        ${limit ? `LIMIT @limit` : ""}
+        ${options.limit ? `LIMIT @limit` : ""}
     `;
 
     try { 
-        let data = limit ? {limit: limit} : {};
+        let data = {...options};
         if(category) data = {...data, category: category}
         return { result: database.prepare(sql).all(data) };
     } catch(error) {
