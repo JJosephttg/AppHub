@@ -1,5 +1,6 @@
 const electron = require('electron');
 const fs = require('fs');
+const childProcess = require('child_process');
 const path = require('path');
 const { dialog, ipcMain } = electron;
 
@@ -41,4 +42,16 @@ ipcMain.handle("ProcessUtility-GetImageData", (event, args) => {
             resolve({canceled: false, result: `data:image/${type};base64,${fs.readFileSync(filePath, {encoding: 'base64'})}`});
         });
     });
+});
+
+//Run specified application
+ipcMain.handle("ProcessUtility-RunApp", (event, app) => {
+  return new Promise((resolve, reject) => {
+    try {
+      childProcess.spawn(app.AppPath, [app.LaunchArgs], {detached: true, shell: true});
+    } catch(error) {
+      dialog.showErrorBox("Launch App", `Failed to launch app: ${err}`);
+      resolve(err);
+    }
+  });
 });

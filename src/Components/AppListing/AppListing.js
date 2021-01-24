@@ -35,12 +35,14 @@ const AppListing = props => {
         );
     };
 
+    const launchApp = app => ipcRenderer.invoke("ProcessUtility-RunApp", app);
+
     return (
         <div style={containerStyle} className={styles["app-list-container"]}>
             {props.displayName ? <h1 className={styles["category-header"]}>{props.displayName}</h1> : null}
             <div className={styles["app-listing-container"]}>
                 {props.appList ? props.appList.map(app => 
-                    <AppItem editAppHandler={editApp} deleteHandler={deleteApp} app={app} key={app.Id}/>
+                    <AppItem launchAppHandler={launchApp} editAppHandler={editApp} deleteHandler={deleteApp} app={app} key={app.Id}/>
                 ) : null}
             </div>
             {props.listingLink ? <Link to={`${props.listingLink}`} className={styles["view-all-link"]}>View All</Link>: null}
