@@ -157,6 +157,16 @@ ipcMain.handle("DBUtility-SaveApp", (event, app) => {
     }
 });
 
+ipcMain.handle("DBUtility-DeleteApp", (event, appId) => {
+    try {
+        database.prepare(`DELETE FROM ${appTable} WHERE Id = ?`).run(appId);
+        return null;
+    } catch(error) {
+        dialog.showErrorBox("Database Error", `Unable to delete app: ${error}`);
+        return error;
+    }
+});
+
 
 
 module.exports = {

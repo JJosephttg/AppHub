@@ -21,19 +21,3 @@ h3 {
     font-size: small;
     height: 1rem;
 }
-
-.closeButton {
-    position: absolute;
-    top: 0;
-    right: 0;
-    color: white;
-    text-decoration: none;
-}
-
-.closeButton:hover {
-    color: gray;
-}
-
-.closeButton:focus {
-    box-shadow: none;
-}

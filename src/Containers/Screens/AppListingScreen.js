@@ -30,7 +30,7 @@ const AppListingScreen = _ => {
         mainAppContext.setPageTitle(categoryName);
     }, [mainAppContext, categoryName, updateListing]);
 
-    return <AppListing appList={appList}/>
+    return <AppListing onDeleteItem={updateListing} appList={appList}/>
 };
 
 export default AppListingScreen;

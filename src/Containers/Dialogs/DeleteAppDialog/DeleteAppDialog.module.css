@@ -1,0 +1,14 @@
+.content-container {
+    max-height: 5rem;
+    min-height: 3.5rem;
+}
+
+.actions-container {
+    margin-top: .5rem;
+    margin-right: .5rem;
+    display: flex;
+}
+
+.actions-container button {
+    margin-right: .5rem;
+}

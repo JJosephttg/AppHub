@@ -1,5 +1,6 @@
 import React, { useState, useCallback } from 'react';
 import { BrowserRouter, Switch, Route} from 'react-router-dom';
+import { ThemeProvider, createMuiTheme} from '@material-ui/core/styles';
 
 import ListingToolBar from '../../Components/ListingToolBar/ListingToolBar';
 import CategoryListingScreen from '../Screens/CategoryListingScreen';
@@ -10,6 +11,12 @@ import OtherAppsScreen from '../Screens/OtherAppsScreen';
 import AppListingScreen from '../Screens/AppListingScreen';
 
 export const MainAppContext = React.createContext();
+
+const appTheme = createMuiTheme({
+  palette: {
+    type: 'dark',
+  },
+});
 
 const MainAppController = _ => {
   const [inputActions, setInputActions] = useState({
@@ -38,30 +45,32 @@ const MainAppController = _ => {
 
   //Possibly title bar
   return (
-    <div className={styles["main-root"]} ref={setMainDialogContainer}>
-      <BrowserRouter>
-        <MainAppContext.Provider value={appContext}>
-            <ListingToolBar title={toolbarTitle} inputActions={inputActions} />
-            <div className={styles["page-container"]}>
-              <Switch>
-                <Route exact path="/">
-                  <CategoryListingScreen />
-                </Route>
-                <Route exact path="/favorites">
-                  <OtherAppsScreen isFavorites/>
-                </Route>
-                <Route exact path="/uncategorized">
-                  <OtherAppsScreen />
-                </Route>
-                <Route exact path="/apps/:categoryName">
-                  <AppListingScreen />
-                </Route>
-              </Switch>
-            </div>
-            <MainAppDialog contentProvider={currentContentProvider} close={appContext.closeMainDialog} isOpen={isMainDialogOpen}/>
-        </MainAppContext.Provider>
-      </BrowserRouter>
-    </div>
+    <ThemeProvider theme={appTheme}>
+      <div className={styles["main-root"]} ref={setMainDialogContainer}>
+        <BrowserRouter>
+          <MainAppContext.Provider value={appContext}>
+              <ListingToolBar title={toolbarTitle} inputActions={inputActions} />
+              <div className={styles["page-container"]}>
+                <Switch>
+                  <Route exact path="/">
+                    <CategoryListingScreen />
+                  </Route>
+                  <Route exact path="/favorites">
+                    <OtherAppsScreen isFavorites/>
+                  </Route>
+                  <Route exact path="/uncategorized">
+                    <OtherAppsScreen />
+                  </Route>
+                  <Route exact path="/apps/:categoryName">
+                    <AppListingScreen />
+                  </Route>
+                </Switch>
+              </div>
+              <MainAppDialog contentProvider={currentContentProvider} close={appContext.closeMainDialog} isOpen={isMainDialogOpen}/>
+          </MainAppContext.Provider>
+        </BrowserRouter>
+      </div>
+    </ThemeProvider>
   );
 };
 

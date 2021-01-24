@@ -1,0 +1,15 @@
+.closeButton {
+    position: absolute;
+    top: 0;
+    right: 0;
+    color: white;
+    text-decoration: none;
+}
+
+.closeButton:hover {
+    color: gray;
+}
+
+.closeButton:focus {
+    box-shadow: none;
+}

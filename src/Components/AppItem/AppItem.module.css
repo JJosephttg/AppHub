@@ -48,6 +48,9 @@
 }
 
 .app-title-settings-container {
-    display: flex;
-    
+    display: flex;   
+}
+
+.app-settings-button {
+    padding: 0;
 }
