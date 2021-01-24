@@ -13,9 +13,10 @@ import mainAppDialogStyles from '../MainAppDialog/MainAppDialogStyles.module.css
 const { ipcRenderer } = window.require('electron');
 
 const AppItemSettings = (props) => {
+    const initialApp = props.initialApp ?? {};
     const [categoryList, setCategoryList] = useState([]);
 
-    const [appPath, setAppPath] = useState("");
+    const [appPath, setAppPath] = useState(initialApp.AppPath ?? "");
     const [appPathError, setAppPathError] = useState("");
 
     const validateAppPath = useCallback(() => {
@@ -30,7 +31,7 @@ const AppItemSettings = (props) => {
 
     useEffect(_ => { validateAppPath(); }, [validateAppPath]);
 
-    const [appName, setAppName] = useState("");
+    const [appName, setAppName] = useState(initialApp.AppName ?? "");
     const [appNameError, setAppNameError] = useState("");
 
     const validateAppName = useCallback(() => {
@@ -45,11 +46,11 @@ const AppItemSettings = (props) => {
     }, [appName]);
 
     useEffect(_ => { validateAppName(); }, [validateAppName]);
-    const initialApp = props.initialApp ?? {};
-    const [category, setCategory] = useState(initialApp.CategoryName);
-    const [launchArgs, setLaunchArgs] = useState("");
-    const [isFavorite, setIsFavorite] = useState(initialApp.IsFavorite);
-    const [imgData, setImgData] = useState(null);
+    
+    const [category, setCategory] = useState(initialApp.CategoryName ?? "");
+    const [launchArgs, setLaunchArgs] = useState(initialApp.LaunchArgs ?? "");
+    const [isFavorite, setIsFavorite] = useState(initialApp.IsFavorite === true || initialApp.IsFavorite === 1);
+    const [imgData, setImgData] = useState(initialApp.ImgSrc);
 
     const getImageData = _ => {
         //Todo: Find a better way to read in base64 string
@@ -76,6 +77,7 @@ const AppItemSettings = (props) => {
                 return;
             }
             var app = {
+                Id: initialApp.Id,
                 AppName: appName.trim(),
                 AppPath: appPath.trim(),
                 CategoryName: category.trim(),

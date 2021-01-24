@@ -56,7 +56,8 @@ const AppItem = props => {
                             <Paper color="secondary">
                                 <ClickAwayListener onClickAway={closeAndExecute}>
                                 <MenuList autoFocusItem={open} onKeyDown={handleListKeyDown}>
-                                    <MenuItem onClick={event => closeAndExecute(event, () => props.deleteHandler(props.app))}>Delete...</MenuItem>
+                                    <MenuItem onClick={event => closeAndExecute(event, _ => props.editAppHandler(props.app))}>Edit...</MenuItem>
+                                    <MenuItem onClick={event => closeAndExecute(event, _ => props.deleteHandler(props.app))}>Delete...</MenuItem>
                                 </MenuList>
                                 </ClickAwayListener>
                             </Paper>

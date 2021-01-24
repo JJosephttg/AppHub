@@ -29,7 +29,7 @@ const OtherAppsScreen = props => {
         mainAppContext.setPageTitle(isFavorites ? "Favorites" : "Other Apps")
     }, [mainAppContext, isFavorites, updateListing]);
 
-    return <AppListing onDeleteItem={updateListing} appList={appList}/>
+    return <AppListing updateListingHandler={updateListing} appList={appList}/>
 };
 
 export default OtherAppsScreen;

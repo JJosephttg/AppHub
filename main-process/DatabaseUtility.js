@@ -121,7 +121,7 @@ ipcMain.handle("DBUtility-GetApps", (event, category, limit) => {
 
 ipcMain.handle("DBUtility-SaveApp", (event, app) => {
     let sqlParams = {
-            appId: app.AppId,
+            appId: app.Id,
             appName: app.AppName,
             appCategory: app.CategoryName,
             appPath: app.AppPath,
@@ -135,11 +135,11 @@ ipcMain.handle("DBUtility-SaveApp", (event, app) => {
         `INSERT OR IGNORE INTO ${categoryTable} (CategoryName) VALUES($appCategory)`);
 
     // insert app
-    let appInsertSql = `INSERT INTO ${appTable} (${app.AppId ? "Id," : ""}AppName,AppPath,LaunchArgs,ImgSrc,IsFavorite,CategoryId)
-        ${app.CategoryName ? "SELECT " : "VALUES("}${app.AppId ? "$appId," : ""}$appName,$appPath,$launchArgs,$imgSrc,$isFavorite,
+    let appInsertSql = `INSERT INTO ${appTable} (${app.Id ? "Id," : ""}AppName,AppPath,LaunchArgs,ImgSrc,IsFavorite,CategoryId)
+        ${app.CategoryName ? "SELECT " : "VALUES("}${app.Id ? "$appId," : ""}$appName,$appPath,$launchArgs,$imgSrc,$isFavorite,
         ${app.CategoryName ? `Id FROM ${categoryTable} WHERE CategoryName = $appCategory` : "NULL)"} `;
     
-    if(app.AppId) { //If appid exists, we are updating it/modifying it, otherwise, we must assume we are inserting
+    if(app.Id) { //If appid exists, we are updating it/modifying it, otherwise, we must assume we are inserting
         appInsertSql += `ON CONFLICT(Id) DO UPDATE SET AppName=excluded.AppName, AppPath=excluded.AppPath, 
                 LaunchArgs=excluded.LaunchArgs, ImgSrc=excluded.ImgSrc, IsFavorite=excluded.IsFavorite, CategoryId=excluded.CategoryId`;
     }
