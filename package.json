@@ -31,7 +31,7 @@
       "provider": "github"
     }
   },
-  "main": "main-process/electron.js",
+  "main": "public/electron.js",
   "homepage": "./",
   "scripts": {
     "react-start": "react-scripts start",
