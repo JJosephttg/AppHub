@@ -1,5 +1,6 @@
 {
   "name": "apphub",
+  "productName": "AppHub",
   "description": "Quick and Easy Access for your favorite launchables",
   "author": "Josh Joseph",
   "version": "1.0.0",
@@ -31,7 +32,11 @@
       "build/**/*",
       "main-process/**/*",
       "node_modules/**/*"
-    ]
+    ],
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true
+    }
   },
   "main": "public/electron.js",
   "homepage": "./",
