@@ -1,5 +1,6 @@
 {
   "name": "apphub",
+  "productName": "AppHub",
   "description": "Quick and Easy Access for your favorite launchables",
   "author": "Josh Joseph",
   "version": "1.0.0",
@@ -27,11 +28,17 @@
     "wait-on": "^3.3.0"
   },
   "build": {
-    "publish": {
-      "provider": "github"
+    "files": [
+      "build/**/*",
+      "main-process/**/*",
+      "node_modules/**/*"
+    ],
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true
     }
   },
-  "main": "main-process/electron.js",
+  "main": "public/electron.js",
   "homepage": "./",
   "scripts": {
     "react-start": "react-scripts start",
