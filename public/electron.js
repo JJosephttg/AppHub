@@ -13,7 +13,7 @@ function createWindow() {
   mainWindow = new BrowserWindow({
     width: 720, height: 680, minWidth: 600, minHeight: 500, webPreferences: { nodeIntegration: true }, show: false
   });
-  //if(!isDev) mainWindow.setMenu(null);
+  if(!isDev) mainWindow.setMenu(null);
   
   mainWindow.on("ready-to-show", mainWindow.show);
   
