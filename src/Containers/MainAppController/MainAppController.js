@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from 'react';
-import { BrowserRouter, Switch, Route} from 'react-router-dom';
+import { MemoryRouter, Switch, Route} from 'react-router-dom';
 import { ThemeProvider, createMuiTheme} from '@material-ui/core/styles';
 
 import ListingToolBar from '../../Components/ListingToolBar/ListingToolBar';
@@ -47,7 +47,7 @@ const MainAppController = _ => {
   return (
     <ThemeProvider theme={appTheme}>
       <div className={styles["main-root"]} ref={setMainDialogContainer}>
-        <BrowserRouter>
+        <MemoryRouter>
           <MainAppContext.Provider value={appContext}>
               <ListingToolBar title={toolbarTitle} inputActions={inputActions} />
               <div className={styles["page-container"]}>
@@ -68,7 +68,7 @@ const MainAppController = _ => {
               </div>
               <MainAppDialog contentProvider={currentContentProvider} close={appContext.closeMainDialog} isOpen={isMainDialogOpen}/>
           </MainAppContext.Provider>
-        </BrowserRouter>
+        </MemoryRouter>
       </div>
     </ThemeProvider>
   );

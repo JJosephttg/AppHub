@@ -27,9 +27,11 @@
     "wait-on": "^3.3.0"
   },
   "build": {
-    "publish": {
-      "provider": "github"
-    }
+    "files": [
+      "build/**/*",
+      "main-process/**/*",
+      "node_modules/**/*"
+    ]
   },
   "main": "public/electron.js",
   "homepage": "./",
