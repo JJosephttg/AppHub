@@ -28,7 +28,7 @@ const open = () => {
         database.prepare(
             `CREATE TABLE IF NOT EXISTS ${appTable} (
                 "Id"            INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-                "AppName"       VARCHAR(200) NOT NULL,
+                "AppName"       VARCHAR(200) NOT NULL UNIQUE,
                 "AppPath"       TEXT NOT NULL,
                 "CategoryId"	INTEGER,
                 "LaunchArgs"    TEXT,
