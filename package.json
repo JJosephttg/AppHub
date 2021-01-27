@@ -3,7 +3,7 @@
   "productName": "AppHub",
   "description": "Quick and Easy Access for your favorite launchables",
   "author": "Josh Joseph",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "private": true,
   "dependencies": {
     "@material-ui/core": "^4.11.0",
@@ -28,6 +28,7 @@
     "wait-on": "^3.3.0"
   },
   "build": {
+    "appId": "JJosephttg.AppHub",
     "files": [
       "build/**/*",
       "main-process/**/*",
@@ -35,7 +36,8 @@
     ],
     "nsis": {
       "oneClick": false,
-      "allowToChangeInstallationDirectory": true
+      "allowToChangeInstallationDirectory": true,
+      "allowElevation": true
     }
   },
   "main": "public/electron.js",

@@ -11,7 +11,7 @@ function createWindow() {
   const database = require('../main-process/DatabaseUtility');
   
   mainWindow = new BrowserWindow({
-    width: 720, height: 680, minWidth: 600, minHeight: 500, webPreferences: { nodeIntegration: true }, show: false
+    width: 720, height: 540, minWidth: 600, minHeight: 500, webPreferences: { nodeIntegration: true }, show: false
   });
   if(!isDev) mainWindow.setMenu(null);
   

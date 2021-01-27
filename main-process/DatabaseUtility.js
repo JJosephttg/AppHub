@@ -1,6 +1,6 @@
 const Database = require('better-sqlite3');
 const electron = require('electron');
-const { dialog, BrowserWindow, ipcMain } = electron;
+const { app, dialog, BrowserWindow, ipcMain } = electron;
 
 let database;
 
@@ -13,7 +13,8 @@ const open = () => {
     if(database && database.open) database.close();
 
     try {
-        database = new Database("db.sqlite", {verbose: console.log});
+        console.log(app.getPath("userData"));
+        database = new Database(`${app.getPath("userData")}/db.sqlite`, {verbose: console.log});
     } catch(error) {
         dialog.showMessageBoxSync({
             title: "Database Error", 
@@ -27,7 +28,7 @@ const open = () => {
         database.prepare(
             `CREATE TABLE IF NOT EXISTS ${appTable} (
                 "Id"            INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-                "AppName"       VARCHAR(200) NOT NULL UNIQUE,
+                "AppName"       VARCHAR(200) NOT NULL,
                 "AppPath"       TEXT NOT NULL,
                 "CategoryId"	INTEGER,
                 "LaunchArgs"    TEXT,

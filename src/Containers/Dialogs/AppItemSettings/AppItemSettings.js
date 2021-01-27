@@ -57,6 +57,13 @@ const AppItemSettings = (props) => {
         return new Promise((resolve, reject) => {
             ipcRenderer.invoke("ProcessUtility-GetImageData").then(data => resolve(data), error => reject(error));
         });
+    };
+
+    const useFileImageHandler = _ => {
+        if(appPath)
+            ipcRenderer.invoke("ProcessUtility-GetFileImage", appPath).then(imageData => {
+                if(imageData) setImgData(imageData);
+            });
     }
 
     useEffect(() => {
@@ -132,9 +139,12 @@ const AppItemSettings = (props) => {
                     />
                     <div className={styles["app-settings-container"]}>
                         <AppIcon size="10rem" imgSrc={imgData} imageLoadFailed={_ => setImgData(null)}>
-                            <button className="btn btn-primary" onClick={
-                                _ => getImageData().then(data => { if(!data.canceled) setImgData(data.result); })
-                            }>Change Image</button>
+                            <div className={styles["image-settings-container"]}>
+                                <button className="btn btn-primary" onClick={
+                                    _ => getImageData().then(data => { if(!data.canceled) setImgData(data.result); })
+                                }>Change Image...</button>
+                                <button style={{marginTop: ".5rem"}} disabled={appPath ? false : true} className="btn btn-primary" onClick={useFileImageHandler}>Use File Image</button>
+                            </div>
                         </AppIcon>
                         <div className={styles["app-info-container"]}>
                             <TextField size="small" fullWidth label="App Name" color="secondary" 

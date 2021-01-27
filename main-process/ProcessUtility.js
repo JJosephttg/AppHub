@@ -2,7 +2,8 @@ const electron = require('electron');
 const fs = require('fs');
 const childProcess = require('child_process');
 const path = require('path');
-const { dialog, ipcMain } = electron;
+
+const { app, dialog, ipcMain } = electron;
 
 // Opens a file dialog and returns the selected path
 ipcMain.handle("ProcessUtility-OpenFileDialog", (event, args) => {
@@ -49,10 +50,23 @@ ipcMain.handle("ProcessUtility-RunApp", (event, app) => {
   return new Promise((resolve, reject) => {
     try {
       if(!fs.existsSync(app.AppPath)) throw "File does not exist";
-      childProcess.spawn(`"${app.AppPath}"`, [app.LaunchArgs], {detached: true, shell: true});
+      childProcess.spawn(`"${app.AppPath}"`, [app.LaunchArgs], {detached: true, shell: true, cwd: path.dirname(app.AppPath)});
     } catch(error) {
       dialog.showErrorBox("Launch App", `Failed to spawn application: ${error}`);
       resolve(error);
+    }
+  });
+});
+
+ipcMain.handle("ProcessUtility-GetFileImage", (event, filePath) => {
+  return new Promise(resolve => {
+    try {
+      app.getFileIcon(filePath).then(imageData => {
+        resolve(imageData.toDataURL());
+      });
+    } catch(error) {
+      dialog.showErrorBox("Generate File Image", `Failed to generate image from file: ${error}`);
+      resolve(null);
     }
   });
 });
